@@ -2,6 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -42,26 +43,24 @@ public class TestPFLB {
         new CreateLetter(this.webDriver).sendMessageNorm();
     }
     @Test //созданное письмо корректно сохраняется в качестве черновика
-    public void SaveDraffs () throws InterruptedException {
+    public void SaveDraffs ()  {
         new BasicBoxMassages(this.webDriver).OpenCreateMessege();
         new CreateLetter(this.webDriver).setMessage(who,sabject,text);
         new CreateLetter(this.webDriver).saveClick();
         new CreateLetter(this.webDriver).saveDraffClick();
-        Thread.sleep(5000);
         new MassageDraffs(this.webDriver).messegeDraffsClick();
         new MassageDraffs(this.webDriver).checMessageDraffs(text);
     }
     @Test //черновик открывается
-    public void checkDraffsMessage () throws InterruptedException {
+    public void checkDraffsMessage ()  {
         new BasicBoxMassages(this.webDriver).OpenCreateMessege();
         new CreateLetter(this.webDriver).setMessage(who,sabject,text);
         new MassageDraffs(this.webDriver).messegeDraffsClick();
-        Thread.sleep(5000);
         new MassageDraffs(this.webDriver).openDraffsMessage();
     }
 
     @Test    //  в черновике корректно сохранены адресат, тема письма и тело письма
-    public void checkSabjectAdressDraffs () throws InterruptedException {
+    public void checkSabjectAdressDraffs () {
         new BasicBoxMassages(this.webDriver).OpenCreateMessege();
         new CreateLetter(this.webDriver).setMessage(who,sabject,text);
         new CreateLetter(this.webDriver).saveClick();
@@ -71,7 +70,7 @@ public class TestPFLB {
         new CreateLetter(this.webDriver).checkMessageSubjectText(who,sabject,text);  // тут фейлится нужна доработка
     }
     @Test   // письмо удаляется из черновиков после отправки
-    public void draffsSend () throws InterruptedException {
+    public void draffsSend () {
         new BasicBoxMassages(this.webDriver).OpenCreateMessege();
         new CreateLetter(this.webDriver).setMessage(who,sabject,text);
         new CreateLetter(this.webDriver).saveClick();
@@ -86,8 +85,9 @@ public class TestPFLB {
 
 
     @Test // выход из учётной записи происходит корректно
-    public void escMail () throws InterruptedException {
-        Thread.sleep(5000);
+    public void escMail () {
         new BasicBoxMassages(this.webDriver).exitMail();
     }
+    @AfterMethod
+    public void tearDown () {this.webDriver.close(); }
 }

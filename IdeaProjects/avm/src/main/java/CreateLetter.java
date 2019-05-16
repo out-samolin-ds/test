@@ -4,10 +4,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import java.util.logging.Logger;
+
 public class CreateLetter{
 WebDriver webDriver;
 
     // Elements
+    private static final Logger log = Logger.getAnonymousLogger();
     private By WhoMessage = By.cssSelector(".js-input:nth-child(6)");
     private By SubjectMessage = By.name("Subject");
     private By TextMessage = By.id("tinymce");
@@ -25,29 +28,40 @@ WebDriver webDriver;
 
     public void setMessage (String who, String subject, String text) {
         this.webDriver.findElement(WhoMessage).sendKeys(who);
+        log.info("Заполено поле от Кому ");
         this.webDriver.findElement(SubjectMessage).sendKeys(subject);
+        log.info("Заполнено поле Тема");
         this.webDriver.switchTo().frame(0).findElement(TextMessage).sendKeys(text);
-        this.webDriver.switchTo().window(this.webDriver.getWindowHandle());;
+        log.info("Заполнен текст письма");
+        this.webDriver.switchTo().window(this.webDriver.getWindowHandle());
     }
 
 
     public void sendClick (){
 
         this.webDriver.findElement(SendMessageClick).click();
+        log.info("Нажата кнопка отправить");
     }
 
     public void sendMessageNorm (){
         Assert.assertTrue(this.webDriver.findElement(SendMessageOK).getText().equals("Ваше письмо отправлено. Перейти во Входящие"));
+        log.info("Письмо отправлено");
     }
     public void saveClick (){this.webDriver.findElement(save).click();
+        log.info("Нажата кнопка Сохранить");
 
     }
-    public void saveDraffClick () throws InterruptedException {this.webDriver.findElement(saveDraff).click(); Thread.sleep(5000);}
+    public void saveDraffClick () {this.webDriver.findElement(saveDraff).click();
+        log.info("Нажата кнопка Сохранить в чернавиках ");
+    }
 
     public void checkMessageSubjectText (String message,String subject,String text){
         Assert.assertTrue(this.webDriver.findElement(WhoMessageDraffs).getText().equals(message));
+        log.info("Прверка по полю Кому - успшна");
         Assert.assertTrue(this.webDriver.findElement(SubjectMessage).getText().equals(subject));
+        log.info("Прверка по полю Тема - успшна");
         Assert.assertTrue(this.webDriver.findElement(TextMessage).getText().equals(text+" -- Jonatan Vilmus"));
+        log.info("Прверка по полю Текст письма - успшна");
 
     }
 
